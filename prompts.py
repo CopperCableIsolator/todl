@@ -3,13 +3,23 @@ internalError = '''An internal Error occured. Restart the program or try again. 
 
 lineSeperator = '''-----------------------------------------------------------------------------C'''
 
-linePrompt = '''>>>'''
+linePrompt = '''>>> '''
 
-insertIDask = '''Enter the entry ID'''
+abortKeyword = '''abort'''
+
+confirmKeyword = '''CONFIRM'''
 
 insertIDnotValid = '''Your chosen ID is not valid (already taken or other violation)'''
 
-insertContent = '''Enter the content of your new entry'''
+idPrompt = '''id='''
+
+contentPrompt = '''content='''
+
+deadlinePrompt = '''deadline='''
+
+initWarning = '''WARNING THIS WILL DELETE ALL YOUR NOTES!!! DO YOU WANT TO CONTINUE?'''
+
+typeConfirmWarning = '''Type <CONFIRM> to confirm the operation'''
 
 commandNotRecognized = '''Command not recognized! type <help> for more'''
 
@@ -33,4 +43,6 @@ helpMessage = '''
 '''
 
 startedSession = '''Starting session...'''
+
+endingSession = '''Have a good one!'''
 

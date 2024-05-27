@@ -1,5 +1,19 @@
-import datahandler
 import prompts
+import listmanagerLib
+from dataclasses import dataclass
+
+head = ''
+csvtodo = 'todo.csv'
+csvdone = 'done.csv'
+
+
+@dataclass 
+class Csvpackage:
+    head:str
+    csvtodo:str
+    csvdone:str
+
+csvpackage = Csvpackage(head=head, csvtodo=csvtodo, csvdone=csvdone)
 
 commandDict = {
     "list all" : 1 ,
@@ -9,76 +23,89 @@ commandDict = {
     "did" : 5 ,
     "delete done" : 6,
     "delete todo" : 7,
-    "init" : 8 ,
-    "undid" : 9
-    #DELETETODO :x
+    "init" : 8,
+    "undid" : 9,
+    "help" : 10,
+    "exit" : 11
+     #DELETETODO :x
 }
 
-def printEntries(list:list):
-    for ent in list:
-        print(f"id={ent['id']} | {"DONE" if ent['done?'] else "TODO"} | {ent['content']}")
-
-def insert():
-    l_todo = datahandler.csvInterfacer('todo.csv', datahandler.readFromList(), 'r')
-    l_done = datahandler.csvInterfacer('done.csv', datahandler.readFromList(), 'r')
-
-    validID = False
-    while(not validID):
-        print(prompts.insertIDask)
-        id = input(prompts.linePrompt)
-        for i in l_todo:
-            if i['id'] == id:
-                print(prompts.insertIDnotValid)
-                continue
-        for i in l_done:
-            if i['id'] == id:
-                print(prompts.insertIDnotValid)
-                continue
-        validID = True
-    print(prompts.insertContent)
-    content = input(prompts.linePrompt)
-    
-    datahandler.csvInterfacer('todo.csv', datahandler.writeRowToList(datahandler.ListElem(id, False, content)))
-
-def awaitInput(insert:bool):
+def awaitCommandInput():
     inp = input(prompts.linePrompt)
     if inp in commandDict:
         return commandDict.get(inp)
     else :
         print(prompts.commandNotRecognized) 
         return 0
+    
+def setCsvPackage(head, csvtodo, csvdone):
+    csvpackage = Csvpackage(head=head, csvtodo=csvtodo, csvdone=csvdone)
+
+def list_all():
+    listmanagerLib.list_all(csvpackage)
+
+def list_done():
+    listmanagerLib.list_done(csvpackage)
+
+def list_todo():
+    listmanagerLib.list_todo(csvpackage)
+
+def insert():
+    listmanagerLib.insert(csvpackage)
+
+def did():
+    listmanagerLib.did(csvpackage)
+
+def undid():
+    listmanagerLib.undid(csvpackage)
+
+def delete_todo():
+    listmanagerLib.delete_todo(csvpackage)
+
+def delete_done():
+    listmanagerLib.delete_done(csvpackage)
+
+def init():
+    listmanagerLib.init(csvpackage)
+
+def help():
+    print(prompts.helpMessage)
+
+def exit():
+    print(prompts.endingSession)
+    exit(0)
+
+
 
 def main():
     print(prompts.startedSession)
     run = True
     while(run):
-        if i := awaitInput() != 0:
+        if (i := awaitCommandInput()) != 0:
             match i :
-                case 1:
-                    l_todo = datahandler.csvInterfacer('todo.csv', datahandler.readFromList(), 'r')
-                    l_done = datahandler.csvInterfacer('done.csv', datahandler.readFromList(), 'r')
-                    printEntries(l_todo)
-                    print(prompts.lineSeperator)
-                    printEntries(l_done)
-                    continue 
-                case 2:
-                    l_done = datahandler.csvInterfacer('done.csv', datahandler.readFromList(), 'r')
-                    printEntries(l_done)
-                case 3:
-                    l_todo = datahandler.csvInterfacer('todo.csv', datahandler.readFromList(), 'r')
-                    printEntries(l_todo)
-                case 4:
-                    insert() 
-                case 5:
-                    pass
-                case 6:
-                    pass
-                case 7:
-                    pass 
-                case 8:
-                    pass
-                case 9:
-                    pass
+                case 1: #list all
+                    list_all()
+                case 2: #list done
+                    list_done()
+                case 3: #list todo
+                    list_todo()
+                case 4: #insert
+                    insert()
+                case 5: #did
+                    did()
+                case 6: #delete done
+                    delete_done()
+                case 7: #delete todo
+                    delete_todo() 
+                case 8: #init
+                    init()
+                case 9: #undid
+                    undid()
+                case 10:
+                    print(prompts.helpMessage)
+                case 11:
+                    print(prompts.endingSession)
+                    exit(0)
                 case _:
                     print(f"{prompts.internalError} main:command id not recognized")
 
