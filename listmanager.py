@@ -1,11 +1,13 @@
 import prompts
+from os import path
 import listmanagerLib
 from dataclasses import dataclass
+import sys
 
-head = ''
+tdir = ''
+head = f'{path.dirname(path.abspath(__file__))}/'
 csvtodo = 'todo.csv'
 csvdone = 'done.csv'
-
 
 @dataclass 
 class Csvpackage:
@@ -13,16 +15,22 @@ class Csvpackage:
     csvtodo:str
     csvdone:str
 
-csvpackage = Csvpackage(head=head, csvtodo=csvtodo, csvdone=csvdone)
+csvpackage = Csvpackage(head=head, csvtodo=head + tdir + csvtodo, csvdone=head + tdir + csvdone)
 
 commandDict = {
     "list all" : 1 ,
+    "la" : 1,
     "list done" : 2 ,
+    "ld" : 2,
     "list todo" : 3 ,
+    "lt" : 3,
     "insert" : 4 ,
+    "ins" : 4,
     "did" : 5 ,
     "delete done" : 6,
+    "dd" : 6,
     "delete todo" : 7,
+    "dt" : 7,
     "init" : 8,
     "undid" : 9,
     "help" : 10,
@@ -73,8 +81,7 @@ def help():
 
 def exit():
     print(prompts.endingSession)
-    exit(0)
-
+    sys.exit(0)
 
 
 def main():
@@ -102,10 +109,9 @@ def main():
                 case 9: #undid
                     undid()
                 case 10:
-                    print(prompts.helpMessage)
+                    help()
                 case 11:
-                    print(prompts.endingSession)
-                    exit(0)
+                    exit()
                 case _:
                     print(f"{prompts.internalError} main:command id not recognized")
 
