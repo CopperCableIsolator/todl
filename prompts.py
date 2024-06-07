@@ -1,5 +1,5 @@
 from colorama import Fore, Back, Style
-
+#this is not a good way to do this
 internalError = Fore.RED + '''An internal Error occured. Restart the program or try again. Error signature: ''' + Style.RESET_ALL
 
 lineSeperator = '''-----------------------------------------------------------------------------C'''
